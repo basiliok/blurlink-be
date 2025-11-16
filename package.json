@@ -1,25 +1,25 @@
 {
-  "name": "blurlink-be",
-  "version": "1.0.0",
-  "description": "",
-  "scripts": {
-    "build": "tsc",
-    "watch": "tsc -w",
-    "clean": "rimraf dist",
-    "prestart": "npm run clean && npm run build",
-    "start": "func start",
-    "test": "echo \"No tests yet...\""
-  },
-  "dependencies": {
-    "@azure/cosmos": "^4.7.0",
-    "@azure/functions": "^4.0.0",
-    "uuid": "^13.0.0"
-  },
-  "devDependencies": {
-    "@types/node": "^20.x",
-    "@types/uuid": "^10.0.0",
-    "rimraf": "^5.0.0",
-    "typescript": "^5.9.3"
-  },
-  "main": "dist/src/{index.js,functions/*.js}"
+    "name": "blurlink-be",
+    "version": "1.0.0",
+    "description": "",
+    "scripts": {
+        "build": "tsc",
+        "watch": "tsc -w",
+        "clean": "rimraf dist",
+        "prestart": "npm run clean && npm run build",
+        "start": "func start",
+        "test": "echo \"No tests yet...\""
+    },
+    "dependencies": {
+        "@azure/cosmos": "^4.7.0",
+        "@azure/functions": "^4.0.0",
+        "uuid": "^13.0.0"
+    },
+    "devDependencies": {
+        "@types/node": "^20.x",
+        "@types/uuid": "^10.0.0",
+        "rimraf": "^5.0.0",
+        "typescript": "^5.9.3"
+    },
+    "main": "dist/src/{index.js,functions/*.js}"
 }
