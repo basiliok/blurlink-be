@@ -30,16 +30,16 @@ const chainPost = async (request: HttpRequest, context: InvocationContext): Prom
     }
 };
 
-app.http('chainGet', {
+app.http('chainGetAll', {
     methods: ['GET'],
-    authLevel: 'anonymous',
+    authLevel: 'admin',
     route: 'chain',
     handler: chainGetAll,
 });
 
 app.http('chainPost', {
     methods: ['POST'],
-    authLevel: 'anonymous',
+    authLevel: 'admin',
     route: 'chain',
     handler: chainPost,
 });
