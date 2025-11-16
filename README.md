@@ -4,6 +4,8 @@ node version 22.20.0
 
 1. intalacion, conexion y consultas en CosmosDB en JS/TS:
    [CosmosDB Azure implementacion](https://learn.microsoft.com/en-us/javascript/api/overview/azure/cosmos-readme?view=azure-node-latest)
+2. Http trigger, configs, authlevel:
+   [Azure Functions HTTP trigger](https://learn.microsoft.com/en-us/azure/azure-functions/functions-bindings-http-webhook-trigger?tabs=python-v2%2Cisolated-process%2Cnodejs-v4%2Cfunctionsv2&pivots=programming-language-typescript)
 
 ### Como correr el proyecto:
 
