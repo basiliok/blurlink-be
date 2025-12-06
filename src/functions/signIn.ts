@@ -1,6 +1,6 @@
 import { app, HttpRequest, HttpResponseInit, InvocationContext } from '@azure/functions';
 import { LoginRequest } from '../types/auth.types';
-import { jwtConfig } from '../config/jwt.config';
+import { env } from '../config/env';
 import * as jwt from 'jsonwebtoken';
 
 const signIn = async (request: HttpRequest, context: InvocationContext): Promise<HttpResponseInit> => {
@@ -12,9 +12,13 @@ const signIn = async (request: HttpRequest, context: InvocationContext): Promise
             return { status: 401, jsonBody: 'Invalid username or password' };
         }
 
-        const newToken = jwt.sign({ userId: 'user-001', username }, jwtConfig.secret, {
-            expiresIn: jwtConfig.expiresIn,
-        } as jwt.SignOptions);
+        const newToken = jwt.sign(
+            { userId: 'user-001', username, iss: env.jwt.issuer },
+            env.jwt.secret,
+            {
+                expiresIn: env.jwt.expiresIn,
+            } as jwt.SignOptions,
+        );
 
         return { status: 200, jsonBody: newToken };
     } catch (error) {

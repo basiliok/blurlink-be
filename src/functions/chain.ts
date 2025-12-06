@@ -3,7 +3,10 @@ import { ChainDocument, CreateChainRequest } from '../types/chain.types';
 import { createChain } from '../services/chain.service';
 import { findAll } from '../repository/chain.repository';
 
-const chainGetAll = async (request: HttpRequest, context: InvocationContext): Promise<HttpResponseInit> => {
+const chainGetAll = async (
+    request: HttpRequest,
+    context: InvocationContext,
+): Promise<HttpResponseInit> => {
     try {
         context.log(`Http function processed request for url "${request.url}"`);
 
@@ -16,7 +19,10 @@ const chainGetAll = async (request: HttpRequest, context: InvocationContext): Pr
     }
 };
 
-const chainPost = async (request: HttpRequest, context: InvocationContext): Promise<HttpResponseInit> => {
+const chainPost = async (
+    request: HttpRequest,
+    context: InvocationContext,
+): Promise<HttpResponseInit> => {
     try {
         context.log(`Http function processed request for url "${request.url}"`);
         const body = (await request.json()) as CreateChainRequest;

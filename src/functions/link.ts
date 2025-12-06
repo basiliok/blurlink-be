@@ -3,7 +3,10 @@ import { LinkDocument, CreateLinkRequest } from '../types/link.types';
 import { createLink } from '../services/link.service';
 import { findAll } from '../repository/link.repository';
 
-const linkGetAll = async (request: HttpRequest, context: InvocationContext): Promise<HttpResponseInit> => {
+const linkGetAll = async (
+    request: HttpRequest,
+    context: InvocationContext,
+): Promise<HttpResponseInit> => {
     try {
         context.log(`Http function processed request for url "${request.url}"`);
 

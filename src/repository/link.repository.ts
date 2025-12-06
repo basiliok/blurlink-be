@@ -3,7 +3,9 @@ import { containers } from '../config/cosmosdb.config';
 import { Link, LinkDocument } from '../types/link.types';
 
 export const findAll = async (): Promise<LinkDocument[]> => {
-    const { resources: links }: FeedResponse<ItemDefinition> = await containers.link.items.readAll().fetchAll();
+    const { resources: links }: FeedResponse<ItemDefinition> = await containers.link.items
+        .readAll()
+        .fetchAll();
     return links as LinkDocument[];
 };
 

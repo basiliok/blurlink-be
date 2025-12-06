@@ -3,7 +3,9 @@ import { containers } from '../config/cosmosdb.config';
 import { Chain, ChainDocument } from '../types/chain.types';
 
 export const findAll = async (): Promise<ChainDocument[]> => {
-    const { resources: chains }: FeedResponse<ItemDefinition> = await containers.chain.items.readAll().fetchAll();
+    const { resources: chains }: FeedResponse<ItemDefinition> = await containers.chain.items
+        .readAll()
+        .fetchAll();
     return chains as ChainDocument[];
 };
 
