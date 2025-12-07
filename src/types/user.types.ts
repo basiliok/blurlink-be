@@ -19,3 +19,5 @@ export interface UserDocument extends User {
     _attachments: string;
     _ts: number;
 }
+
+export interface UserWithoutPassword extends Omit<UserDocument, 'passwordHash'> {}

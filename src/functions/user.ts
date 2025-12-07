@@ -1,5 +1,5 @@
 import { app, HttpRequest, HttpResponseInit, InvocationContext } from '@azure/functions';
-import { CreateUserRequest, UserDocument } from '../types/user.types';
+import { CreateUserRequest, UserDocument, UserWithoutPassword } from '../types/user.types';
 import { createUser } from '../services/user.service';
 
 const userPost = async (request: HttpRequest, context: InvocationContext): Promise<HttpResponseInit> => {
@@ -11,11 +11,9 @@ const userPost = async (request: HttpRequest, context: InvocationContext): Promi
             return { status: 400, jsonBody: 'Email and password are required' };
         }
 
-        const createdUser: UserDocument = await createUser(body);
+        const createdUser: UserWithoutPassword = await createUser(body);
 
-        const { passwordHash, ...userResponse } = createdUser;
-
-        return { status: 201, jsonBody: userResponse };
+        return { status: 201, jsonBody: createdUser };
     } catch (error) {
         context.error('Error processing userPost request:', error);
         return { status: 500, jsonBody: 'Internal Server Error' };
@@ -24,7 +22,7 @@ const userPost = async (request: HttpRequest, context: InvocationContext): Promi
 
 app.http('userPost', {
     methods: ['POST'],
-    authLevel: 'anonymous',
+    authLevel: 'admin',
     route: 'user',
     handler: userPost,
 });

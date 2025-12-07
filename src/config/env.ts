@@ -13,6 +13,6 @@ export const env = {
         issuer: process.env.JWT_ISSUER,
     },
     bcrypt: {
-        saltRounds: process.env.BCRYPT_SALT_ROUNDS,
+        saltRounds: Number(process.env.BCRYPT_SALT_ROUNDS),
     },
 } as const;

@@ -1,8 +1,9 @@
 import * as bcrypt from 'bcrypt';
 import { v4 as uuidv4 } from 'uuid';
 import { insert, findByEmail } from '../repository/user.repository';
-import { User, UserDocument, CreateUserRequest } from '../types/user.types';
+import { User, UserDocument, CreateUserRequest, UserWithoutPassword } from '../types/user.types';
 import { env } from '../config/env';
+import * as jwt from 'jsonwebtoken';
 
 export const getUserByEmail = async (email: string): Promise<UserDocument | null> => {
     const user = await findByEmail(email);
@@ -11,7 +12,7 @@ export const getUserByEmail = async (email: string): Promise<UserDocument | null
     return user;
 };
 
-export const createUser = async (body: CreateUserRequest): Promise<UserDocument> => {
+export const createUser = async (body: CreateUserRequest): Promise<UserWithoutPassword> => {
     const existingUser = await findByEmail(body.email);
     if (existingUser) throw new Error('User with this email already exists');
 
@@ -26,5 +27,28 @@ export const createUser = async (body: CreateUserRequest): Promise<UserDocument>
         updatedAt: new Date().toISOString(),
     };
 
-    return insert(user);
+    const createdUser: UserDocument = await insert(user);
+
+    const { passwordHash: _, ...userWithoutPassword } = createdUser;
+    return userWithoutPassword;
+};
+
+export const authenticateUser = async (email: string, password: string): Promise<string> => {
+    const user = await findByEmail(email);
+
+    if (!user) throw new Error('User not found');
+
+    const isPasswordValid = await bcrypt.compare(password, user.passwordHash);
+
+    if (!isPasswordValid) throw new Error('Invalid email or password');
+
+    const token = jwt.sign(
+        { userId: user.id, username: user.email, iss: env.jwt.issuer },
+        env.jwt.secret,
+        {
+            expiresIn: env.jwt.expiresIn,
+        } as jwt.SignOptions,
+    );
+
+    return token;
 };
