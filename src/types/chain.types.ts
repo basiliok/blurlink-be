@@ -7,6 +7,7 @@ export interface CreateChainRequest {
     linkStyle: 'classic' | 'modern' | 'minimal';
     linkDirection: 'horizontal' | 'vertical';
     linkSize: 'small' | 'medium' | 'large';
+    note: string;
 }
 
 export interface Chain extends CreateChainRequest {

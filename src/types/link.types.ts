@@ -2,6 +2,7 @@ export interface CreateLinkRequest {
     chainId: string;
     title: string;
     url: string;
+    note: string;
 }
 
 export interface Link extends CreateLinkRequest {

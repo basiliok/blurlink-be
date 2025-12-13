@@ -2,6 +2,8 @@ import { app, HttpRequest, HttpResponseInit, InvocationContext } from '@azure/fu
 import { ChainDocument, CreateChainRequest } from '../types/chain.types';
 import { createChain } from '../services/chain.service';
 import { findAll } from '../repository/chain.repository';
+import { withBodyValidation } from '../HOFs/withBodyValidation';
+import { createChainSchema } from '../schemas/chain.schema';
 
 const chainGetAll = async (
     request: HttpRequest,
@@ -25,9 +27,9 @@ const chainPost = async (
 ): Promise<HttpResponseInit> => {
     try {
         context.log(`Http function processed request for url "${request.url}"`);
-        const body = (await request.json()) as CreateChainRequest;
+        const chainRequest = (await request.json()) as CreateChainRequest;
 
-        const createdChain: ChainDocument = await createChain(body);
+        const createdChain: ChainDocument = await createChain(chainRequest);
 
         return { status: 200, body: JSON.stringify(createdChain) };
     } catch (error) {
@@ -47,5 +49,5 @@ app.http('chainPost', {
     methods: ['POST'],
     authLevel: 'admin',
     route: 'chain',
-    handler: chainPost,
+    handler: withBodyValidation(createChainSchema)(chainPost),
 });

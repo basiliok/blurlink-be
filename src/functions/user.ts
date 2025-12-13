@@ -1,17 +1,15 @@
 import { app, HttpRequest, HttpResponseInit, InvocationContext } from '@azure/functions';
-import { CreateUserRequest, UserDocument, UserWithoutPassword } from '../types/user.types';
+import { CreateUserRequest, UserWithoutPassword } from '../types/user.types';
 import { createUser } from '../services/user.service';
+import { withBodyValidation } from '../HOFs/withBodyValidation';
+import { createUserSchema } from '../schemas/user.schema';
 
 const userPost = async (request: HttpRequest, context: InvocationContext): Promise<HttpResponseInit> => {
     try {
         context.log(`Http function processed request for url "${request.url}"`);
-        const body = (await request.json()) as CreateUserRequest;
+        const userRequest = (await request.json()) as CreateUserRequest;
 
-        if (!body.email || !body.password) {
-            return { status: 400, jsonBody: 'Email and password are required' };
-        }
-
-        const createdUser: UserWithoutPassword = await createUser(body);
+        const createdUser: UserWithoutPassword = await createUser(userRequest);
 
         return { status: 201, jsonBody: createdUser };
     } catch (error) {
@@ -24,5 +22,5 @@ app.http('userPost', {
     methods: ['POST'],
     authLevel: 'admin',
     route: 'user',
-    handler: userPost,
+    handler: withBodyValidation(createUserSchema)(userPost),
 });
