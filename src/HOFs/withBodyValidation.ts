@@ -1,6 +1,7 @@
 import { HttpRequest, HttpResponseInit, InvocationContext } from '@azure/functions';
 import { AzureFunction, WithBodyValidation } from '../types/hof.types';
 import { z } from 'zod';
+import { zodErrorResponse, internalErrorResponse, badRequestResponse } from '../utils/apiResponse';
 
 export const withBodyValidation: WithBodyValidation =
     (schema: z.ZodTypeAny) =>
@@ -10,7 +11,7 @@ export const withBodyValidation: WithBodyValidation =
             const requestBodyText = await request.text();
 
             if (!requestBodyText) {
-                return { status: 400, jsonBody: { error: 'Request body is required' } };
+                return badRequestResponse('Request body is required');
             }
 
             const requestForValidation = _recreateHttpRequest(request, requestBodyText);
@@ -22,10 +23,9 @@ export const withBodyValidation: WithBodyValidation =
             return nextFunction(newRequest, context);
         } catch (error) {
             context.error('Error in withBodyValidation:', error);
-            if (error instanceof z.ZodError) {
-                return { status: 400, jsonBody: { error: error.issues } };
-            }
-            return { status: 500, jsonBody: { error: 'Internal Server Error' } };
+            if (error instanceof z.ZodError) return zodErrorResponse(error);
+
+            return internalErrorResponse();
         }
     };
 

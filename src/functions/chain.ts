@@ -4,6 +4,13 @@ import { createChain } from '../services/chain.service';
 import { findAll } from '../repository/chain.repository';
 import { withBodyValidation } from '../HOFs/withBodyValidation';
 import { createChainSchema } from '../schemas/chain.schema';
+import {
+    createdResponse,
+    httpErrorResponse,
+    internalErrorResponse,
+    okResponse,
+} from '../utils/apiResponse';
+import { HttpError } from '../errors/HttpError';
 
 const chainGetAll = async (
     request: HttpRequest,
@@ -14,10 +21,11 @@ const chainGetAll = async (
 
         const chains = await findAll();
 
-        return { status: 200, body: JSON.stringify(chains) };
+        return okResponse({ data: chains });
     } catch (error) {
         context.error('Error processing chainGetAll request:', error);
-        return { status: 500, body: 'Internal Server Error' };
+        if (error instanceof HttpError) return httpErrorResponse(error);
+        return internalErrorResponse();
     }
 };
 
@@ -31,10 +39,11 @@ const chainPost = async (
 
         const createdChain: ChainDocument = await createChain(chainRequest);
 
-        return { status: 200, body: JSON.stringify(createdChain) };
+        return createdResponse({ data: createdChain });
     } catch (error) {
         context.error('Error processing chainPost request:', error);
-        return { status: 500, body: 'Internal Server Error' };
+        if (error instanceof HttpError) return httpErrorResponse(error);
+        return internalErrorResponse();
     }
 };
 

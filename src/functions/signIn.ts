@@ -3,6 +3,8 @@ import { LoginRequest } from '../types/auth.types';
 import { authenticateUser } from '../services/user.service';
 import { signInSchema } from '../schemas/auth.schema';
 import { withBodyValidation } from '../HOFs/withBodyValidation';
+import { httpErrorResponse, internalErrorResponse, okResponse } from '../utils/apiResponse';
+import { HttpError } from '../errors/HttpError';
 
 const signIn = async (request: HttpRequest, context: InvocationContext): Promise<HttpResponseInit> => {
     try {
@@ -11,10 +13,11 @@ const signIn = async (request: HttpRequest, context: InvocationContext): Promise
 
         const token = await authenticateUser(email, password);
 
-        return { status: 200, jsonBody: { token } };
+        return okResponse({ data: { token } });
     } catch (error) {
         context.error('Error in signIn:', error);
-        return { status: 500, jsonBody: { message: 'Internal Server Error' } };
+        if (error instanceof HttpError) return httpErrorResponse(error);
+        return internalErrorResponse();
     }
 };
 

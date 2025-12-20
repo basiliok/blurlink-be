@@ -4,6 +4,13 @@ import { createLink } from '../services/link.service';
 import { findAll } from '../repository/link.repository';
 import { withBodyValidation } from '../HOFs/withBodyValidation';
 import { createLinkSchema } from '../schemas/link.schema';
+import {
+    createdResponse,
+    httpErrorResponse,
+    internalErrorResponse,
+    okResponse,
+} from '../utils/apiResponse';
+import { HttpError } from '../errors/HttpError';
 
 const linkGetAll = async (
     request: HttpRequest,
@@ -14,10 +21,11 @@ const linkGetAll = async (
 
         const links = await findAll();
 
-        return { status: 200, body: JSON.stringify(links) };
+        return okResponse({ data: links });
     } catch (error) {
         context.error('Error processing linkGetAll request:', error);
-        return { status: 500, body: 'Internal Server Error' };
+        if (error instanceof HttpError) return httpErrorResponse(error);
+        return internalErrorResponse();
     }
 };
 
@@ -28,10 +36,11 @@ const linkPost = async (request: HttpRequest, context: InvocationContext): Promi
 
         const createdLink: LinkDocument = await createLink(linkRequest);
 
-        return { status: 200, body: JSON.stringify(createdLink) };
+        return createdResponse({ data: createdLink });
     } catch (error) {
         context.error('Error processing linkPost request:', error);
-        return { status: 500, body: 'Internal Server Error' };
+        if (error instanceof HttpError) return httpErrorResponse(error);
+        return internalErrorResponse();
     }
 };
 

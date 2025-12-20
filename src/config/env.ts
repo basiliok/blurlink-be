@@ -1,7 +1,9 @@
+import { HttpError } from '../errors/HttpError';
+
 const _getRequiredEnv = (key: string): string => {
     const value = process.env[key];
     if (!value) {
-        throw new Error(`Missing required environment variable: ${key}`);
+        throw new HttpError(`Missing required environment variable: ${key}`, 500);
     }
     return value;
 };

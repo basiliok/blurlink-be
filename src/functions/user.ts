@@ -3,6 +3,8 @@ import { CreateUserRequest, UserWithoutPassword } from '../types/user.types';
 import { createUser } from '../services/user.service';
 import { withBodyValidation } from '../HOFs/withBodyValidation';
 import { createUserSchema } from '../schemas/user.schema';
+import { createdResponse, httpErrorResponse, internalErrorResponse } from '../utils/apiResponse';
+import { HttpError } from '../errors/HttpError';
 
 const userPost = async (request: HttpRequest, context: InvocationContext): Promise<HttpResponseInit> => {
     try {
@@ -11,10 +13,11 @@ const userPost = async (request: HttpRequest, context: InvocationContext): Promi
 
         const createdUser: UserWithoutPassword = await createUser(userRequest);
 
-        return { status: 201, jsonBody: createdUser };
+        return createdResponse({ data: createdUser });
     } catch (error) {
         context.error('Error processing userPost request:', error);
-        return { status: 500, jsonBody: 'Internal Server Error' };
+        if (error instanceof HttpError) return httpErrorResponse(error);
+        return internalErrorResponse();
     }
 };
 
