@@ -1,7 +1,8 @@
 import { z } from 'zod';
 
 export const createChainSchema = z.object({
-    userId: z.string().min(1, { message: 'User ID is required' }),
+    userId: z.string().min(30, { message: 'User ID is required' }),
+    spaceId: z.string().min(30, { message: 'Space ID is required' }),
     chainName: z.string().min(1, { message: 'Chain name is required' }),
     position: z.number({ message: 'Position is required and must be a number' }),
     width: z.number({ message: 'Width is required and must be a number' }),

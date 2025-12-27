@@ -13,9 +13,10 @@ export const env = {
         endpoint: _getRequiredEnv('COSMOSDB_ENDPOINT'),
         key: _getRequiredEnv('COSMOSDB_KEY'),
         databaseId: _getRequiredEnv('COSMOSDB_DATABASE_ID'),
+        userContainerId: _getRequiredEnv('COSMOSDB_USER_CONTAINER_ID'),
+        spaceContainerId: _getRequiredEnv('COSMOSDB_SPACE_CONTAINER_ID'),
         chainContainerId: _getRequiredEnv('COSMOSDB_CHAIN_CONTAINER_ID'),
         linkContainerId: _getRequiredEnv('COSMOSDB_LINK_CONTAINER_ID'),
-        userContainerId: _getRequiredEnv('COSMOSDB_USER_CONTAINER_ID'),
     },
     jwt: {
         secret: _getRequiredEnv('JWT_SECRET'),

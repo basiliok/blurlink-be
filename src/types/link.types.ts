@@ -1,4 +1,5 @@
 export interface CreateLinkRequest {
+    spaceId: string;
     chainId: string;
     title: string;
     url: string;
@@ -7,6 +8,7 @@ export interface CreateLinkRequest {
 
 export interface Link extends CreateLinkRequest {
     id: string;
+    userId: string;
     createdAt: string;
     updatedAt: string;
 }

@@ -1,5 +1,6 @@
 export interface CreateChainRequest {
     userId: string;
+    spaceId: string;
     chainName: string;
     position: number;
     width: number;

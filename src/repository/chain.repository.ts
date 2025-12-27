@@ -2,6 +2,16 @@ import { FeedResponse, ItemDefinition, ItemResponse } from '@azure/cosmos';
 import { containers } from '../config/cosmosdb.config';
 import { Chain, ChainDocument } from '../types/chain.types';
 
+export const findById = async (id: string, spaceId: string): Promise<ChainDocument | null> => {
+    const { resource: chain }: ItemResponse<ItemDefinition> = await containers.chain
+        .item(id, spaceId)
+        .read();
+
+    if (!chain) return null;
+
+    return chain as ChainDocument;
+};
+
 export const findAll = async (): Promise<ChainDocument[]> => {
     const { resources: chains }: FeedResponse<ItemDefinition> = await containers.chain.items
         .readAll()

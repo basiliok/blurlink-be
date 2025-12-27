@@ -7,7 +7,8 @@ const cosmosClient = new CosmosClient({
 });
 
 export const containers = {
+    user: cosmosClient.database(env.cosmos.databaseId).container(env.cosmos.userContainerId),
+    space: cosmosClient.database(env.cosmos.databaseId).container(env.cosmos.spaceContainerId),
     chain: cosmosClient.database(env.cosmos.databaseId).container(env.cosmos.chainContainerId),
     link: cosmosClient.database(env.cosmos.databaseId).container(env.cosmos.linkContainerId),
-    user: cosmosClient.database(env.cosmos.databaseId).container(env.cosmos.userContainerId),
 };
